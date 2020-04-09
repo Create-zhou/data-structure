@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stack</title>
+</head>
+<body>
+<script>
+    //封装栈的方式
+    /*
+    * 栈的基础方式包括
+    * push(element) 入栈
+    * pop()  出栈
+    * peek() 查找栈顶的第一个元素（不删除栈顶的第一个元素）
+    * isEmpty() 检查是否为空栈 是则返回true 不是则返回false
+    * size() 返回栈的长度
+    * tostring() 以字符串的形式返回
+    *
+    *
+    * */
+      function Stack(){
+          //定义一个栈元素
+        this.items =[];
+        //封装一个push元素
+        Stack.prototype.push = function(element){
+            this.items.push(element)
+        }
+        //封装一个pop元素
+          Stack.prototype.pop = function(){
+            return this.items.pop()
+          }
+          //封装一个peek元素
+          Stack.prototype.peek = function(){
+            return this.items[this.items.length-1]
+          }
+          //封装一个isEmpty元素
+          Stack.prototype.isEmpty= function(){
+             return this.items.length == 0;
+    }
+    //封装一个size元素
+          Stack.prototype.size = function () {
+              return this.items.length;
+          }
+          //封装一个toString元素
+          var str="";
+          Stack.prototype.toString = function () {
+             for(var i=0;i<this.items.length;i++){
+                 str += this.items[i]+''
+             }
+              return str;
+          }
+ }
+     var s = new Stack();
+    //   s.push(20)
+    //   s.push(30)
+    //   s.push(40)
+    //   s.push(50)
+    //  // alert(s)
+    //
+    //   s.pop()
+    //   //alert(s)
+    //
+    // //alert(s.peek())
+    //    //alert(s.isEmpty())
+    //    //alert(s.size())
+    //    alert(s.toString())
+
+
+    /*
+    * 二进制写法
+    * */
+    function  dec2bin(number){
+        //1定义栈对象
+        var stack  =  new Stack()
+        //2 循环操作
+        while(number>0){
+            //3 获取余值   并且将余值入栈
+            stack.push(number%2)
+            //4 获取整除后的结果 作为下一个运用的数字
+            number = Math.floor(number/2)
+        }
+        //5 从栈中获取0和1
+        var str="";
+        //6 如果栈中不为空
+        while(!stack.isEmpty()){
+            //7 就以字符串的形式出栈
+           str +=stack.pop();
+        }
+        // 8 将结果返回出来
+        return str;
+    }
+
+    alert(dec2bin(100))
+    alert(dec2bin(23442))
+</script>
+</body>
+</html>

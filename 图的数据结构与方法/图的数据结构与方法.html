@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图的数据结构与方法</title>
+</head>
+<body>
+<script src="../字典的数据结构/dictionaries.js"></script>
+<script src="queue.js"></script>
+<script>
+         //封装图结构
+      function Graph() {
+         //属性
+          //顶点(数组）/边（字典）
+          this.vertexes = [];
+          //边
+          this.DTA = new dictionaries();
+          //方法
+         //添加顶点方法
+          Graph.prototype.addVertexes = function(v){
+              //将新的数据加入空对象中
+              this.vertexes.push(v);
+              //每一个节点都会生成指向 可理解为该索引所指向的节点；
+              this.DTA.set(v,[]);
+          }
+          //添加边的方法
+          Graph.prototype.addDTA = function(v1,v2){
+              //第一种为有向；
+              this.DTA.get(v1).push(v2);
+              //第二种为无向
+              this.DTA.get(v2).push(v1);
+          }
+          //实现toString方法
+          Graph.prototype.toString = function(){
+              //定义属性
+              var resultString = "";
+              //遍历顶点 获取每一个数据
+              for(var i=0;i<this.vertexes.length;i++){
+                  resultString += this.vertexes[i]+"->";
+                  //创建临时变量 获取顶点的每一个数据；
+                 var thisVertexesLength = this.DTA.get(this.vertexes[i]);
+                 //遍历遍历每一个获取到的数据；
+                 for(var j=0;j<thisVertexesLength.length;j++){
+                      resultString += thisVertexesLength[j] + "";
+                 }
+                 resultString += "\n";
+              }
+              //已字符串的 方式的返回出来；
+              return resultString;
+          }
+          //初始化颜色；
+          Graph.prototype.initColors = function(){
+              var colors = [];
+              for(var i=0;i<this.vertexes.length;i++){
+                  colors[this.vertexes[i]]= "white";
+              }
+              return colors;
+          }
+          //广度优先搜索(bfs)
+          Graph.prototype.bfs = function(initV,handle){
+              //初始化所有颜色
+              var color = this.initColors();
+              //获取队列；
+              var queue = new Queue();
+              //将顶点加入队列中；
+              queue.enqueue(initV)
+              //循环从队列中取出元素；
+              while(!queue.isEmpty()){
+                  //从队列中取出顶点
+                  var V = queue.dequeue()
+                  //获取和顶点相连另外的顶点
+                  var vList = this.DTA.get(V);
+                  //将颜色设置成黑色；
+                  color[V] = "gray";
+                  //获取所有顶点并且加入队列中；
+                  for(var i=0;i<vList.length;i++){
+                      var e = vList[i];
+                      if(color[e]=="white"){
+                          color[e]="gray";
+                          queue.enqueue(e);
+                      }
+                  }
+                  //访问顶点；
+                  if(handle){
+                      handle(V)
+                  };
+                  //将颜色设置为黑色；
+                  color[V]="black";
+              }
+
+          }
+          //深度遍历（dfs）
+          Graph.prototype.dfs = function(initV,handle){
+              //初始化颜色
+              var color = this.initColors()
+              //从某个顶点开始访问；
+              this.dfsSion(initV,color,handle)
+          }
+          //深度遍历递归调用
+          Graph.prototype.dfsSion = function(v,color,handle){
+              //设置颜色；
+             color[v] = 'gray';
+              //处理v顶点；
+               handle(v);
+               //访问v相邻的顶点；
+               var vList = this.DTA.get(v);
+               //获取所有的顶点并且加入队列中；
+              for(var i=0;i<vList.length;i++){
+                  var e = vList[i];
+                  if(color[e]=="white"){
+                      this.dfsSion(e,color,handle);
+                  }
+              }
+              //将颜色设置黑色；
+              color[v] = "black"
+          }
+
+      }
+      //实例图结构
+    var TU = new Graph();
+      //测试代码
+     var myGraph = ['A','B','C','D','E','F','G','H','I']
+      for(var i=0;i<myGraph.length;i++){
+          TU.addVertexes(myGraph[i]);
+      }
+      //测试代码；
+         TU.addDTA("A",'B');
+         TU.addDTA("A",'C');
+         TU.addDTA("A",'D');
+         TU.addDTA("C",'D');
+         TU.addDTA("C",'G');
+         TU.addDTA("D",'G');
+         TU.addDTA("D",'H');
+         TU.addDTA("B",'E');
+         TU.addDTA("B",'F');
+         TU.addDTA("E",'I');
+         alert(TU)
+    //测试bfs遍历；
+    var result ='';
+    TU.bfs(TU.vertexes[0],function(v){
+        result += v + "";
+    })
+    alert(result);
+    //测试dfs遍历；
+    var resTostring = '';
+    TU.dfs(TU.vertexes[0],function(v){
+        resTostring +=v+"";
+    })
+    alert(resTostring)
+</script>
+</body>
+</html>

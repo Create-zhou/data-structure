@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>priority</title>
+</head>
+<body>
+<script>
+    /*
+    * 封装优先级队列
+    *   1 权重分前后 为优先
+    *   2 数小排首  为优先
+    *   3 特殊情况..
+    * */
+    //定义函数作用
+       function priorityQueue(){
+           //定义内部的类
+           function priorityElement(element,priority){
+               this.element = element;
+               this.priority = priority;
+           }
+           //封装元素
+           this.items= [];
+           //定义内部的方法
+           priorityQueue.prototype.enqueue = function(element,priority){
+               //继承内部的类
+               var Queue = new priorityElement(element,priority)
+               //判断元素是否为空，如果为空就把数据添加进去
+               if(this.items.length==0){
+                   this.items.push(Queue)
+                   layDown = true;
+               }else {
+                   //设置开关 确保数据进行比较时有加入元素
+                   var layDown = false;
+                   for (var i = 0; i < this.items.length; i++) {
+                       //数据的优先级进行比较，数值越小优先级越高
+                      if(Queue.priority < this.items[i].priority) {
+                           //比较后插入元素
+                           this.items.splice(i, 0, Queue)
+                           //此时应停止比较 断开循环
+                           layDown = true;
+                           break;
+                       }
+                   }
+               }
+               //如果比较无果 就直接加入到最后一位
+               if(!layDown){
+                   this.items.push(Queue)
+               }
+           }
+           priorityQueue.prototype.dequeue = function(){
+               return this.items.shift()
+           }
+           priorityQueue.prototype.front = function(){
+               return this.items[0]
+           }
+           priorityQueue.prototype.isEmpty = function(){
+               return this.items.length == 0;
+           }
+           priorityQueue.prototype.size = function() {
+               return this.items.length
+           }
+           priorityQueue.prototype.toString = function () {
+               var str = '';
+               for(var i=0;i<this.items.length;i++){
+                   str += this.items[i].element + ":"+this.items[i].priority+";";
+               }
+               return str
+           }
+       }
+       //测试代码
+    var Q = new priorityQueue()
+
+    //enqueue的方法
+        Q.enqueue("ery",123)
+        Q.enqueue("wer",54)
+        Q.enqueue("sdh",567)
+        Q.enqueue("tyu",45)
+        alert(Q)
+
+</script>
+</body>
+</html>

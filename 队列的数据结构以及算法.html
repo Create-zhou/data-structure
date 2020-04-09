@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Queue</title>
+</head>
+<body>
+<script>
+      /*队列的基础方法
+      * 1 enqueue  从最后端添加元素
+      * 2 dequeue  从最前端删除元素
+      * 3 front 差看第一个元素
+      * 4 isEmpty 查看队列是否为空
+      * 5 size  查看队列的length
+      * 6 toString 字符串的方式
+      *
+      * */
+    function Queue(){
+        this.items = [];
+            Queue.prototype.enqueue = function(element){
+                this.items.push(element)
+            }
+            Queue.prototype.dequeue = function(){
+                return this.items.shift()
+            }
+            Queue.prototype.front = function(){
+                return this.items[0]
+            }
+            Queue.prototype.isEmpty = function(){
+                return this.items.length == 0;
+            }
+            Queue.prototype.size = function() {
+                return this.items.length
+            }
+            Queue.prototype.toString = function () {
+                var str = '';
+                for(var i=0;i<this.items.length;i++){
+                    str += this.items[i]
+                }
+                return str
+            }
+    }
+          var  Q = new Queue()
+     //测试方法
+     //    Q.enqueue(10)
+     //    Q.enqueue(20)
+     //    Q.enqueue(30)
+     //    Q.enqueue(40)
+     //    alert(Q)
+     //    Q.dequeue()
+     //    Q.dequeue()
+     //    alert(Q)
+     //    alert(Q.front())
+     //   alert(Q.isEmpty())
+     //   alert(Q.size())
+     //    alert(Q.toString())
+    //击鼓传花
+    /*
+    * n个元素在一起，按照顺序传递 当被n个值传到时淘汰
+    *
+    * */
+    //1 构造方法
+     function queue(numberList,num){
+         //队列继承
+         var q = new Queue()
+         // //定义元素
+         // this.items = [];
+         //将每一个numberList加入队列中
+         for(var i=0;i<numberList.length;i++){
+             q.enqueue(numberList[i]);
+             console.log(numberList);
+         }
+         //如果不是num值，将依次向后排序
+         //如果是num值，将被淘汰
+         while(q.size()>1)
+         {
+             for (var i = 0; i < num; i++) {
+                 q.enqueue(q.dequeue())
+             }
+             q.dequeue()
+         }
+         alert(q.size())
+         var pq = q.front()
+         alert('最后剩下的人:'+pq)
+         return numberList.indexOf(pq)
+     }
+     //测试代码
+      var name = ['w', 'e', 'r', 'o', 't', 'z']
+      alert(queue(name,3))
+      console.log(name);
+      console.log(name.length);
+</script>
+</body>
+</html>

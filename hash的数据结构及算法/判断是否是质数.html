@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>判断是否是质数</title>
+</head>
+<body>
+<script>
+    //判断质数的普通写法
+    function prime(sum){
+        for(var i=2;i<sum;i++){
+            if(sum%i==0){
+                return false
+            }
+        }
+        return true;
+    }
+    //测试代码
+    alert(prime(7))
+    alert(prime(2344))
+    //判断是否是质数的高级写法
+    function isPrime(sum) {
+        var teep = Math.fool(Math.sqrt(sum))
+        for(var i=0;i<teep;i++){
+            if(sum%i==0){
+                return false
+            }
+        }
+        return true;
+    }
+    alert(prime(7))
+    alert(prime(2344))
+</script>
+</body>
+</html>

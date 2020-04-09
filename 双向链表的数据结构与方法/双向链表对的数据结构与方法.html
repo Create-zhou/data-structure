@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DouBloLinkedList</title>
+</head>
+<body>
+<script>
+    /*
+    *  双向链表的特点
+    * 1 可以向后或者向前遍历
+    * */
+    function DouBloLinkedList(){
+        //定义内部类
+        function Node(data){
+            this.data = data;
+            this.next = null;
+            this.tail = null;
+        }
+        //属性
+        this.head = null;
+        this.tail = null;
+        this.length = 0;
+        //追加append方法
+        DouBloLinkedList.prototype.append = function(data){
+            //定义新的节点
+            var node = new Node(data)
+            //如果节点为空
+            if(this.length==0){
+                this.head = node;
+                this.tail = node;
+            }else{ //如果结果不为空
+                node.pri = this.tail;
+               this.tail.next = node;
+               this.tail = node;
+            }
+            //3length+1
+            this.length +=1;
+        }
+        //追加toString发方法
+        DouBloLinkedList.prototype.toString = function () {
+            return this.backWordString()
+        }
+        //追加forWordString方法
+        DouBloLinkedList.prototype.forWordString = function(){
+            //定义变量
+           var current = this.tail;
+           var forWordString = '';
+           while (current){
+               forWordString += current.data+',';
+               current = current.pri;
+           }
+            return forWordString;
+        }
+        //追加backWordString方法
+        DouBloLinkedList.prototype.backWordString = function(){
+                var current = this.head;
+                var  backWordString = "";
+                while(current){
+                    backWordString += current.data+',';
+                    current = current.next;
+                }
+            return backWordString;
+        }
+        //追加isEmpty方法
+        DouBloLinkedList.prototype.isEmpty = function () {
+            return this.length == 0;
+        }
+        //追加size方法
+        DouBloLinkedList.prototype.size = function () {
+            return this.length;
+        }
+        //追加insert方法
+        DouBloLinkedList.prototype.insert = function (position,data) {
+            //边界限定
+            if(position<0||position>=this.length)return false;
+            //新建一个节点
+            var node = new Node(data)
+            var current = this.head;
+            //当length为空时
+            if(this.length==0){
+                this.head=node;
+                this.tail=node;
+            }else{
+                if(position==0){ //传入的索引值为空时
+                    this.head.pri = node;
+                    node.next= this.head;
+                   this.head = node;
+                } else if(position==this.length){//当传入的值等于length时
+                    node.pri = this.tail;
+                    this.tail.next = node;
+                    this.tail = node;
+            }else { //又或者其他情况
+                var index = 0;
+                while (index++ < position) {
+                    current = current.next;
+                }
+                node.next = current;
+                node.pri = current.pri;
+                current.pri.next = node;
+                current.pri = node;
+            }
+            }
+           this.length+=1;
+            return current.data;
+        }
+        //追加get方法
+        DouBloLinkedList.prototype.get = function(position){
+            //边界限制
+            if(position<0||position>=this.length)return null;
+             //定义属性
+            var current = this.head;
+            var index = 0;
+            while (index++<position){
+               current =  current.next
+            }
+            return current .data;
+        }
+        //追加indexOf方法
+        DouBloLinkedList.prototype.indexOf = function(data){
+           //定义变量
+            var current = this.head;
+            var index = 0;
+            while (current){
+           if(current.data==data){
+               return index
+           }
+           current = current.next;
+           index +=1
+            }
+            return -1
+        }
+        //追加update方法
+        DouBloLinkedList.prototype.update = function(position,data){
+            //限制边界
+            if(position<0||position>=this.length)return null;
+            //创建新的节点
+            var node = new Node(data)
+            //定义属性
+            var current = this.head;
+            var index = 0;
+            while (index++<position){
+                current = current.next;
+            }
+            current.data = node.data;
+            return true;
+        }
+        //追加removeAt方法
+        DouBloLinkedList.prototype.removeAt = function(position) {
+            //边界限制
+            if (position < 0 || position >= this.length) return null;
+            //定义属性
+            var current = this.head;
+            //当length等于0的时候
+            if (this.length == 0) {
+                this.head = null;
+                this.tail = null;
+            } else {//当节点为第一个节点时
+                if (position == 0) {
+                    this.head.next.pri = null;
+                    this.head = this.head.next;
+                } else if (position == this.length - 1) {//大于或者等于length的时候
+                    this.tail.pri.next = null;
+                    this.tail = this.tail.pri;
+                } else {
+                    var index = 0;
+                    while (index++ < position) {
+                        current = current.next;
+                    }
+                    current.pri.next = current.next;
+                    current.next.pri = current.pri;
+                }
+            }
+            this.length -= 1;
+            return current.data;
+        }
+        //追加remove方法
+        DouBloLinkedList.prototype.remove = function (data) {
+          var index = this.indexOf(data)
+            return this.removeAt(index);
+        }
+    }
+    var DBlist = new DouBloLinkedList();
+
+    //测试代码
+    DBlist.append("daw");
+    DBlist.append("zhou");
+    DBlist.append("lai")
+    // alert(DBlist)
+    // alert(DBlist.forWordString())
+    DBlist.insert(0,"aaa")
+    alert(DBlist)
+    alert(DBlist.get(2))
+    alert(DBlist.indexOf("zhou"))
+    DBlist.update(2,"bbb");
+    alert(DBlist)
+    DBlist.removeAt(1)
+    alert(DBlist)
+    DBlist.remove("lai")
+    alert(DBlist)
+</script>
+</body>
+</html>

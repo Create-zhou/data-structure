@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>binarySearchTree</title>
+</head>
+<body>
+<script>
+    /*
+    *  binarySearchTree
+    * 1 insert（key） 在树种插入一个新的元素
+    * 2 Search (key) 在树中查找一个键 如果键存在就返回一个true如果不存在就返回一个false
+    * 3 inOlderTraverse 先序遍历
+    * 4 preOlderTraverse 中序遍历
+    * 5 postOlderTraverse 后序遍历
+    * 6 max 返回节点的最大值
+    * 7 min 返回节点的最小值
+    * 8 remove（key） 从树中移除某个键
+    * */
+    //构造binarySearchTree函数
+    function binarySearchTree(){
+        //定义一个内部的类
+        function Node(key){
+            //定义属性
+            this.key = key;
+            this.left = null;
+            this.right = null;
+        }
+         this.root = null;
+        //追加insert方法
+        binarySearchTree.prototype.insert = function(key){
+            //创建新节点
+            var newNode = new Node(key)
+           //判断节点是否为null;
+            if(this.root == null){
+                this.root  = newNode;
+            }else {
+                this.insertNode(this.root, newNode)
+            }
+        }
+        //递归判断节点
+        binarySearchTree.prototype.insertNode = function(node,newNode) {
+            if (newNode.key < node.key) {//如果原来的节点小于新的节点
+                if (node.left === null) { //向左递归 如果原先没有节点就插入新的节点
+                    node.left = newNode;
+                }else {//如果没有就继续递归循环
+                    this.insertNode(node.left, newNode)
+                }
+            } else {//原先的节点大于新的节点
+                if (node.right === null) { //向右递归 如有原先没有节点就插入新的节点
+                    node.right = newNode;
+                }else {
+                    this.insertNode(node.right, newNode)//如果没有就继续递归循环
+                }
+            }
+        }
+        //遍历操作
+       //追加inOlderTraverse遍历 先序遍历
+        binarySearchTree.prototype.inOlderTraverse = function (handle) {
+                 this.inOlderTraverseReCurSion(this.root,handle)
+        }
+        //追加inOlderTraverse递归
+        binarySearchTree.prototype.inOlderTraverseReCurSion = function (node,handle) {
+             if(node!=null){
+                 //处理经过的节点
+                 handle(node.key);
+                 //向左递归 处理经过的节点
+                 this.inOlderTraverseReCurSion(node.left,handle)
+                 //向右递归 处理经过的节点
+                 this.inOlderTraverseReCurSion(node.right,handle)
+             }
+        }
+        //追加preOlderTraverse遍历 中序遍历
+        binarySearchTree.prototype.preOlderTraverse = function(handle){
+               this.preOlderTraverseRecursion(this.root,handle)
+        }
+        //追加preOlderTraverse递归
+        binarySearchTree.prototype.preOlderTraverseRecursion = function(node,handle){
+            if(node!=null){
+                //向左遍历 处理经过的节点
+                this.preOlderTraverseRecursion(node.left,handle)
+                //处理经过的节点
+                 handle(node.key)
+                //向右遍历 处理经过的节点
+                this.preOlderTraverseRecursion(node.right,handle);
+            }
+        }
+        //追加postOlderTraverse遍历 后序遍历
+        binarySearchTree.prototype.postOlderTraverse = function (handle) {
+             this.postOlderTraverseRecursion(this.root,handle)
+        }
+        //追加postOlderTraverse递归
+        binarySearchTree.prototype.postOlderTraverseRecursion = function(node,handle){
+              if(node!=null){
+                  //向左遍历 处理经过的节点
+                  this.postOlderTraverseRecursion(node.left,handle)
+                  //向右遍历 处理经过的节点
+                  this.postOlderTraverseRecursion(node.right,handle)
+                  //处理经过的节点
+                  handle(node.key);
+              }
+        }
+        //最小的值
+        binarySearchTree.prototype.min = function(){
+            var node = this.root;
+            while(node.left!=null){
+             node = node.left;
+            }
+            return node.key;
+        }
+        //最大的值
+        binarySearchTree.prototype.max = function(){
+            var node = this.root;
+            while(node.right!=null){
+                node = node.right
+            }
+            return node.key;
+        }
+        //追加 Search 获取方法
+        binarySearchTree.prototype.Search = function(key){
+               //获取根节点
+            var node  = this.root;
+            //根节点不等于空的时候
+            while(node!=null){
+                if(key<node.key){
+                    node = node.left;
+                }else if(key>node.key){
+                    node = node.right
+                }else{
+                    return  true;
+                }
+            }
+           return false
+        }
+        //删除操作
+        binarySearchTree.prototype.remove = function(key){
+             //定义属性
+            var current = this.root;
+            var parent = this.root;
+            var ischildleft = true;
+            //开始查找节点
+            while(current.key!==key){
+                parent = current;
+                if(key<current.key){
+                    ischildleft = true;
+                    current = current.left;
+                }else {
+                    ischildleft = false;
+                    current = current.right;
+                }
+                //如果循环的最后没有找到key
+                if(current==null)return false;
+            }
+            //如果要删除的是叶节点
+            if(current.left==null&&current.right==null){
+                if(current==this.root){
+                    this.root = null;
+                }else if (ischildleft){
+                    parent.left = null
+                }else{
+                    parent.right = null;
+                }
+            }
+            //如果要删除的节点只有一个子节点
+              else if(current.left==null){
+                  if(current.left==this.root){
+                      this.root = current.left;
+                  }else if(ischildleft){
+                      parent.left = current.left;
+                  }else{
+                      parent.left = current.right;
+                  }
+            }
+              else if(current.right==null){
+                  if(current.right==this.root){
+                      this.root=current.right;
+                  }else if(ischildleft){
+                      parent.right = current.left;
+                  }else{
+                      parent.right = current.right;
+                  }
+            }
+
+            //如果要删除的节点有两个子节点
+               else {
+                //获取后继的节点
+                var sccessor = this.getsccessor(current)
+                if (current == this.root) {
+                    this.root = sccessor;
+                } else if (ischildleft) {
+                    parent.left = sccessor;
+                } else {
+                    parent.right = sccessor;
+                }
+               //3 将删除节点的左子树赋值给sccessor;
+                sccessor.left = current.left;
+            }
+               return  true;
+        }
+        //封装删除的节点
+        binarySearchTree.prototype.getsccessor = function(delNode){
+            //定义属性 保存后继的属性
+            var sccessor = delNode;
+            //current为根节点右边的数据
+            var current = delNode.right;
+            var sccessorParent = delNode;
+            //循环遍历 当根节点不等于空的时候
+            while(current != null){
+                //附一个每一次找的后继节点
+                sccessorParent = current;
+                //根节点替换为根节点右边的值
+                sccessor = current;
+                //跟节点的指向为current左边的值；
+                current = current.left;
+            }
+            //判断后继的节点是否直接等于delnode.right的值 如果不是直接返回sccessor;
+            if(sccessor!=delNode.right){
+                      sccessorParent.left = sccessor.right;
+                      sccessor.right = delNode.right;
+            }
+            return sccessor ;
+        }
+    }
+     var BST = new binarySearchTree()
+    //测试代码
+    BST.insert(11)
+    BST.insert(10)
+    BST.insert(6)
+    BST.insert(5)
+    BST.insert(8)
+    BST.insert(14)
+    BST.insert(13)
+    BST.insert(16)
+    BST.insert(18)
+    BST.insert(15)
+    BST.insert(7)
+    BST.insert(9)
+ //测试遍历
+    var tostring = "";
+    BST.inOlderTraverse(function (key) {
+        tostring += key + ",";
+    })
+    alert(tostring);
+    var preString = "";
+    BST.preOlderTraverse(function(key){
+        preString += key + ",";
+    })
+    alert(preString);
+    var postString = "";
+    BST.postOlderTraverse(function (key) {
+        postString += key + ",";
+    })
+     alert(postString);
+    //测试最值
+    // alert(BST.min());
+    // alert(BST.max());
+    // //测试获取
+    // alert(BST.Search(11))
+    //测试删除
+    alert(BST.remove(14))
+    alert(BST.remove(8))
+
+</script>
+</body>
+</html>

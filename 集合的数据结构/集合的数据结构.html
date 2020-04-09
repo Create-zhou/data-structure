@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>集合的数据结构</title>
+</head>
+<body>
+<script>
+    function Set() {
+        //定义属性
+        this.items = {}
+        //方法
+        //add方法
+        Set.prototype.add = function (value) {
+            //判断是否添加重复
+            if (this.has(value)) return false;
+            //将元素添加
+            this.items[value] = value
+            return true
+        }
+        //remove方法
+        Set.prototype.remove = function (value) {
+            //判断是否删除重复
+            if (!this.has(value)) return false;
+            //将元素删除
+            delete this.items[value]
+            return true
+        }
+        //has方法
+        Set.prototype.has = function (value) {
+            return this.items.hasOwnProperty(value)
+        }
+        //clear方法
+        Set.prototype.clear = function () {
+            //返回一个空的对象原型
+            this.items = {};
+            return true;
+        }
+        //size方法、
+        Set.prototype.size = function () {
+            //返回object里面的每一个键值的length
+            return Object.keys(this.items).length;
+        }
+        //获取value里面的所有值
+        Set.prototype.values = function () {
+            return Object.keys(this.items);
+        }
+        //集合的操作间
+        //并集：A||B结合在一个新的集合里 ==>union
+        Set.prototype.union = function (otherSet) {
+            //继承集合属性
+            var unionSet = new Set()
+            //创建新的集合 并将集合的属性添加到新的集合里
+            var value = this.values()
+            for (var i = 0; i < value.length; i++) {
+                unionSet.add(value[i])
+            }
+            //创建节点B，并将节点B添加进新的集合中
+            var value = otherSet.values()
+            for (var i = 0; i < value.length; i++) {
+                unionSet.add(value[i])
+            }
+            //将集合的结果返回出来
+            return unionSet;
+        }
+        //交集 ： 将A||B的值返回出来 ==>duPliCateValue
+        Set.prototype.duPliCateValue = function (otherSet) {
+            //创建新的集合
+            var DuPliCateValueSet = new Set();
+            //创建集合B
+            var value = this.values()
+            for (var i = 0; i < value.length; i++) {
+                var item = value[i]
+                if (otherSet.has(item)) {
+                    DuPliCateValueSet.add(item);
+                }
+            }
+            return DuPliCateValueSet;
+        }
+        //差集：返回A集有且B集没有的属性 ==>Unity
+        Set.prototype.Unity = function (otherSet) {
+            //创建新的集合
+            var UnitySet = new Set()
+            //创建A集合 并将A集合的值添加进新创建的集合
+            var value = this.values()
+            for(var i=0;i<value.length;i++){
+                var items = value[i];
+                if(!otherSet.has(items)){
+                    UnitySet.add(items)
+                }
+            }
+            return UnitySet;
+        }
+        //子集：A集有的属性B集有 就是子集 A集有的 B集没有
+        // (所有属性必须一致才可以返回true)
+        // 就不是子集(判断)==> judge
+        Set.prototype.judge = function (otherSet) {
+            //创建A集合 并判断其他集合是否是拥有自身的某个属性
+            var value = this.values()
+            for(var i=0;i<value.length;i++){
+                var items = value[i]
+                if(!otherSet.has(items))return false;
+            }
+            return true;
+        }
+    }
+    // var set = new Set();
+    // //测试代码
+    // alert(set.add("asb"))
+    // alert(set.add("eww"))
+    // alert(set.add("asb"))
+    // alert(set.remove("asb"))
+    // alert(set.remove("asb"))
+    // alert(set.values())
+    // alert(set.has("eww"))
+    // alert(set.size())
+    // alert(set.clear())
+    // alert(set.size())
+    //测试并集
+    var uniA = new Set()
+    uniA.add("abs")
+    uniA.add("bbb")
+    uniA.add("wer")
+    var uniB = new Set()
+    uniB.add("asba")
+    uniB.add("bbb")
+    uniB.add("wer")
+    //求两个集合的并集
+    var unionSet = uniA.union(uniB)
+    alert(unionSet.values())
+    //求两个集合的交集
+    var duPliCateValueSet = uniA.duPliCateValue(uniB)
+    alert(duPliCateValueSet.values())
+    //求两个集合的差集
+    var UnitySet = uniA.Unity(uniB)
+    alert(UnitySet.values())
+    //判断是否是子集
+    alert(uniA.judge(uniB))
+
+</script>
+</body>
+</html>

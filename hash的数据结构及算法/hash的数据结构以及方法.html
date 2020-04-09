@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>hashCode</title>
+</head>
+<body>
+<script>
+    /*
+    *  封装hash函数的方法
+    * 定义hashcode属性
+    * 1 记录数组可存放的长度
+    * 2 初始化空数组
+    * 3 初始化数组的长度
+    * 封装hashfunc函数
+    * 常用的方法为  ---> 基于链式封装
+    * 1 put   添加以及修改值
+    * 2 get   获取操作
+    * 3 remove 删除操作
+    * 4 isEmpty 判断hash是否位空
+    * 5 size   返回元素的个数
+    * 扩容操作 ：-->resize
+    * 当元素值达到index的百分之七十五时 进行扩容
+    * 当元素值少于数组的百分之二十五的时候进行缩容
+    * 封装质数 --》 isPrime;
+    * 判断质数 --》 prime
+    * */
+     function hashCode(){
+         //添加属性
+         //1 记录数组可存放的长度
+        this.Limit = 7;
+        //2 初始化空数组
+        this.storage =[];
+        //3 初始化数组的长度
+         this.count = 0;
+         /*
+           * 构造hash函数的方法
+        * 1 将字符串转成较大的数字hashcode
+       * 2 将较大的数值hashcode压缩到数组范围的大小内
+        * */
+         hashCode.prototype.hashfunc = function(str,size){
+             //初始化hashcode值
+             var hashcode = 0;
+             /*
+             *   将字符串转成Unicode码
+             * */
+             for(var i=0;i<str.length;i++){
+                 hashcode = 37*hashcode+str.charCodeAt(i)
+             }
+             //取余操作
+             var index = hashcode%size;
+             return index;
+         }
+         //判断质数的高级方法
+        hashCode.prototype.isPrime =  function (sum) {
+             var teep = Math.fool(Math.sqrt(sum))
+             for(var i=0;i<teep;i++){
+                 if(sum%i==0){
+                     return false
+                 }
+             }
+             return true;
+         }
+         //哈希扩容
+         hashCode.prototype.resize = function(newLimit){
+             //保存旧的数组内容
+             var OldStorage  = this.storage;
+             //重置所有属性
+             this.storage = [];
+             this.count  = 0;
+             this.Limit = newLimit;
+             //遍历OldStorage中所有的bucket;
+             for(var i=0;i<OldStorage.length;i++){
+                 var bucket = OldStorage[i]
+                 //判断bucket是否为空；
+                 if(bucket==null){
+                     continue;
+                 }
+             }
+             //bucket中有数据，取出所有数据 重新插入
+             for(var j=0;j<bucket.lenght;j++){
+                 var items = bucket[j]
+                 this.put(items[0],items[1])
+             }
+         }
+         //获取质数的封装
+         hashCode.prototype.getPrime = function(sum){
+             //14 -->17
+             //34 -->37
+             while (!this.isPrime(sum)){
+                 sum++
+             }
+             return sum;
+         }
+         //追加put方法
+         hashCode.prototype.put = function (key,value) {
+             //根据key获取对应的index
+             var index = this.hashfunc(key,this.Limit)
+             //根据索引值取出bucket
+             var bucket = this.storage[index];
+             //判断bucket是否为空
+             if(bucket==null){
+                 bucket = [];
+                 this.storage[index] = bucket;
+             }
+           //判断是否修改数据
+             for(var i=0;i<bucket.length;i++){
+                 var items =  bucket[i]
+                 if(items[0]==key){
+                     items[1] = value;
+                     return items[1]
+                 }
+             }
+           //添加属性到bucket;并且count长度加一；
+             bucket.push([key,value]);
+             this.count +=1;
+             //扩容操作
+             if(this.count>this.Limit*0.75){
+                 var newsize = this.Limit*2
+                 var newPrime = this.getPrime(newsize)
+                 this.resize(newPrime)
+             }
+         }
+         //获取操作
+         hashCode.prototype.get = function(key){
+             //根据key获取对应的index
+             var index = this.hashfunc(key,this.Limit);
+             //根据索引值取出bucket
+             var bucket = this.storage[index];
+             //判断bucket是否为null
+             if(bucket==null){
+                 return null
+             }
+             //有bucket,就进行线性查找，
+             for(var i=0;i<bucket.length;i++){
+                  var items = bucket[i]
+                 if(items[0]==key){
+                     return items[1]
+                 }
+             }
+             //如果依然没有找到 那就返回null
+             return  null;
+         }
+         //remove方法
+         hashCode.prototype.remove = function (key) {
+             //根据key获取索引index
+             var index = this.hashfunc(key,this.Limit)
+             //根据索引获取index;
+             var bucket = this.storage[index];
+             //如果当前bucket为空 那就返回null
+             if(bucket==null){
+                 return null
+             }
+             //如果有，依次遍历bucket 找到值 并且删除
+             for(var i=0;i<bucket.length;i++){
+                 var items = bucket[i]
+                 if(items[0]==key) {
+                     items.splice(i, 1)
+                     this.count -= 1
+                     return items[1]
+                     //缩容操作
+                     if(this.count>7&&this.count<this.Limit*0.25){
+                         var newsize = Math.floor(this.Limit/2);
+                         var newprime = getprime(newsize)
+                         this.resize(newprime);
+                     }
+                 }
+             }
+             //如果依旧没有 那就返回null
+             return null;
+         }
+        // 判断hash是否位空
+         hashCode.prototype.isEmpty = function() {
+             return this.count == 0;
+         }
+         //返回元素的length
+         hashCode.prototype.size = function () {
+             return this.count;
+         }
+
+     }
+     var HC = new hashCode();
+    //测试代码
+    HC.put("wer","123")
+    HC.put("asd","234")
+    HC.put("zxc","456")
+    HC.put("vbn","678")
+    alert(HC.get("asd"))
+    alert(HC.put("wer","111"))
+    alert(HC.get("wer"))
+    alert(HC.size())
+    HC.remove("asd")
+    HC.remove("vbn")
+    alert(HC.size())
+    alert(HC.isEmpty())
+
+</script>
+</body>
+</html>

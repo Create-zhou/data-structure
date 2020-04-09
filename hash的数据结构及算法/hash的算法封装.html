@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>hash的算法封装</title>
+</head>
+<body>
+<script>
+    /*
+    *  设计hash函数
+    * 1 将字符串转成较大的数字hashcode
+    * 2 将较大的数值hashcode压缩到数组范围的大小内
+    *
+    * */
+    function hashfunc(str,size){
+        //初始化hashcode值
+        var hashcode = 0;
+        /*
+        *   将字符串转成Unicode码
+        * */
+        for(var i=0;i<str.length;i++){
+            hashcode = 37*hashcode+str.charCodeAt(i)
+        }
+        //取余操作
+        var index = hashcode%size;
+        return index;
+    }
+    //测试代码
+    alert(hashfunc("ewer",7))
+    alert(hashfunc("hfsa",7))
+    alert(hashfunc("yuuk",7))
+    alert(hashfunc("svvt",7))
+</script>
+</body>
+</html>

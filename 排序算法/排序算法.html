@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>排序算法</title>
+</head>
+<body>
+<script>
+    function sortRank() {
+        //定义属性
+        this.items =[]
+        //定义方法
+        //添加方法
+        sortRank.prototype.insert = function(items){
+            this.items.push(items);
+        }
+        //toString方法
+        sortRank.prototype.toString = function () {
+            return this.items.join("-");
+        }
+        //添加sway方法
+        sortRank.prototype.sway = function (n,m) {
+            var teem = this.items[n];
+            this.items[n] = this.items[m];
+            this.items[m] = teem;
+        }
+        //冒泡算法
+        sortRank.prototype.bubbleSort = function () {
+              //先获取数组的长度；
+              var length = this.items.length;
+            // 2.反向循环, 因此次数越来越少
+                  for(var j=length-1;j>=0;j--){
+                      // 3.根据i的次数, 比较循环到i位置
+                      for(var i=0;i<j;i++){
+                          // 4.如果j位置比j+1位置的数据大, 那么就交换
+                      if(this.items[i]>this.items[i+1]){
+                          // 交换
+                        this.sway(i,i+1);
+                      }
+                  }
+              }
+        }
+        //选择算法
+        sortRank.prototype.selectionSort  = function () {
+            //先获取数组的长度；
+            var length = this.items.length;
+            // 2.外层循环: 外层循环是从0位置开始, 依次遍历到最后
+            for(var j=0;j<length-1;j++ ){
+                // 3.内层循环: 从i+1位置开始, 和后面的内容比较
+              var min = j;
+              for(var i=min+1;i<length;i++){
+                  // 4.如果i位置的数据大于j位置的数据, 记录最小的位置
+                  if (this.items[min] > this.items[i]) {
+                      min = i
+                  }
+              }
+              //取外层循环j;
+                this.sway(min, j)
+            }
+        }
+        //插入算法
+         sortRank.prototype.insertSort = function () {
+             //获取数组的长度;
+             var length = this.items.length;
+             //外层循环 从1的位置开始向前遍历；
+             for(var i=1;i<length;i++){
+                 var j = i;
+                 //取出length的每一个i节点；
+                 var temp = this.items[i];
+                 // 4.内层循环: 内层循环不确定循环的次数, 最好使用while循环
+                 while (this.items[j-1]>temp&&j>0){
+                     this.items[j] = this.items[j-1];
+                     j--;
+                 }
+                 // 5.将选出的j位置, 放入temp元素
+                 this.items[j] = temp;
+             }
+         }
+        //希尔算法
+         sortRank.prototype.shellSort = function () {
+             //先获取数组的长度；
+             var length = this.items.length;
+             // 2.根据长度计算增量
+             var gap = Math.floor(length/2)
+             // 3.增量不断变量小, 大于0就继续排序
+              while(gap>0){
+                  // 4.实现插入排序
+                 for(var i=gap;i<length;i++){
+                     var temp = this.items[i];
+                     // 4.1.保存临时变量
+                     var j =i;
+                     // 4.2.插入排序的内存循环
+                     while (j>gap-1&&this.items[j-1]>temp){
+                         this.items[j] = this.items[j-gap]
+                         j-=gap;
+                     }
+                     // 5.将选出的j位置, 放入temp元素
+                     this.items[j] = temp;
+                 }
+                  // 5.重新计算新的间隔
+                  gap = Math.floor(gap / 2)
+             }
+
+         }
+        //快速算法
+        //获取枢纽
+        sortRank.prototype.midden = function(left,right){
+            // 1.求出中间的位置
+            var center  = Math.floor(left+right)/2;
+            // 2.判断并且进行交换
+            if(this.items[left]>this.items[center]){
+                this.sway(left,center)
+            }
+            if(this.items[center]>this.items[right]){
+                this.sway(center,right)
+            }
+            if(this.items[left]>this.items[right]){
+                this.sway(left,right)
+            }
+            // 3.巧妙的操作: 将center移动到right - 1的位置.
+            this.sway(center,right-1)
+            // 4.返回pivot
+            return this.items[right-1];
+        }
+        sortRank.prototype.quickSort = function(){
+            this.quick(0,this.items.length-1);
+        }
+        //快速算法递归调用；
+        sortRank.prototype.quick = function(left,right){
+            // 0.递归结束条件
+            if(left>=right)return ;
+            // 1.获取枢纽
+            var pivot = this.midden(left,right);
+            // 2.开始进行交换
+            var i = left;
+            var j = right-1;
+            while(true){
+                while(this.items[++i]<pivot){}
+                while (this.items[--j]>pivot){}
+                if(i<j){
+                    this.sway(i,j);
+                }else{
+                    break;
+                }
+            }
+            // 3.将枢纽放在正确的位置
+            this.sway(i,right-1);
+            // 4.递归调用左边
+            this.quick(left, i - 1)
+            this.quick(i + 1, right)
+        }
+    }
+    // 初始化数据项
+    var list = new sortRank();
+    list.insert(3)
+    list.insert(6)
+    list.insert(4)
+    list.insert(2)
+    list.insert(11)
+    list.insert(10)
+    list.insert(5)
+   // alert(list) // 3,6,4,2,11,10,5
+    // list.bubbleSort();
+    // alert(list);
+    // list.selectionSort();
+    // alert(list);
+    // list.insertSort();
+    // alert(list);
+    // list.shellSort();
+    // alert(list)
+    list.quickSort();
+    alert(list);
+</script>
+</body>
+</html>

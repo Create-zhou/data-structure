@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>字典的数据结构</title>
+</head>
+<body>
+<script>
+    /*
+    *    字典的数据结构 --> dictionaries
+    * 1 set 添加数据
+    * 2 remove 删除数据
+    * 3 has 判断是否存在某个key值
+    * 4 get  根据key值获取value;
+    * 5 keys  获取所有key;
+    * 6 values 获取所有value；
+    * 7 size 获取length的长度
+    * 8 clear 清空数据;
+    * */
+    //定义函数作用
+       function dictionaries(){
+           //定义属性
+           this.items = {};
+           //构造方法
+           //set 添加数据
+           dictionaries.prototype.set = function(key,value){
+               this.items[key] = value;
+               return true;
+
+           }
+           //判断是否存在某个key值；
+           dictionaries.prototype.has = function(key){
+               return this.items.hasOwnProperty(key);
+           }
+           //删除方法
+           dictionaries.prototype.remove = function (key) {
+               if(!this.has(key))return false;
+               delete this.items[key];
+               return true;
+           }
+           // 根据key值获取value;
+           dictionaries.prototype.get = function(key) {
+               return this.has(key) ? this.items[key] : undefined;
+           }
+           //获取所有keys;
+               dictionaries.prototype.keys = function (key) {
+                   return Object.keys(this.items);
+               }
+               //获取所有的value;
+           dictionaries.prototype.values = function (value) {
+               return Object.values(this.items)
+           }
+           //获取数据的长度；
+           dictionaries.prototype.size = function(){
+               return Object.keys(this.items).length;
+           }
+           //将数据清空；
+           dictionaries.prototype.clear = function(){
+               return this.items = {};
+           }
+       }
+       var D = new dictionaries();
+       //测试代码；
+    D.set("asd",123)
+    D.set("wer",123);
+    D.set("rty",233);
+    D.set("dfg",567);
+    D.set("xcz",534);
+    D.set("hjk",422);
+    alert(D.size());
+    alert(D.remove("asd"))
+    alert(D.remove("asd"))
+    alert(D.remove("dfg"))
+    alert(D.size())
+    alert(D.values())
+    alert(D.keys())
+    alert(D.get("hjk"))
+    alert(D.clear())
+    alert(D.size())
+</script>
+</body>
+</html>
